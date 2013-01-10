@@ -72,14 +72,14 @@ To run the Example proceed as follows:
 ------------
 > $ cd Example
 > 
-> $ python runSimilarityTranformObj.py
+> $ python runSimilarityTransformObj.py
 
 ------------
 
 or
 
 ------------
-> $ python runSimilarityTranform.py
+> $ python runSimilarityTransform.py
 
 ------------
 

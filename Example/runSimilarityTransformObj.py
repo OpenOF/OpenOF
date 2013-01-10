@@ -33,7 +33,7 @@ def similarityTransformation(pt1,pt2):
     
     min=opt.MinimizerSimTrans()
     '''verbose=0 : no print statements; verbose=1 : initial and final values; verbose=2 : residual in each iteration'''
-    min.verbose=5
+    min.verbose=1
     '''termination values of the levenberg marquardt algorithm'''
 
     min.eps1=1e-15
