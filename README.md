@@ -17,6 +17,7 @@ The framework was tested using Ubuntu 12.04, 64 bit and libraries with the follo
 - Thrust 1.6
 - CUSP 0.3
 - numpy 1.6.1
+- swig 2.0.4 
 
 Cite:
 ------------------------------------------
