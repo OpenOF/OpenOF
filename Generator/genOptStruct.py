@@ -489,7 +489,7 @@ def genOptCodeFuncMeas(name,f,namesOpt,variablesOpt,addVariables,debug=False):
     
     #ex,eq= sympy.cse(f)
     ex,eq= sympy.cse(f)
-    if sympy.__version__>'0.7.1':
+    if sympy.__version__>='0.7.2':
         eq=eq[0]
     
     for e in ex:
@@ -596,7 +596,7 @@ def genOptCodeJacMeas(name,jac,namesOpt,variablesOpt,addVariables,jacOrder=None)
                 
                 
     ex,eq= sympy.cse(jac)
-    if sympy.__version__>'0.7.1':
+    if sympy.__version__>='0.7.2':
         eq=eq[0]
     for e in ex:
         outStr+="\toof_float "+str(e[0])+'='+printing.ccode(e[1])+';\n'
