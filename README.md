@@ -21,7 +21,7 @@ The framework was tested using Ubuntu 12.04, 64 bit and libraries with the follo
 
 Cite:
 ------------------------------------------
-If you use OpenOF for you research please cite:
+If you use OpenOF for your research please cite:
 
 Cornelius Wefelscheid and Olaf Hellwich
 OpenOF: Framework for sparse non-linear least squares optimization on a gpu.
