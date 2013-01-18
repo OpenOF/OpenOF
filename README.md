@@ -49,7 +49,7 @@ License:
 Getting started:
 ------------------------------------------
 
-OpenOF comes with two examples, similarity transformation and bundle adjustement. To get started we recommend locking in the simpler model of the similarity transformation. To get the similarity transformation example running you need to do the following steps.
+OpenOF comes with two examples, similarity transformation and bundle adjustement. To get started we recommend looking in the simpler model of the similarity transformation. To get the similarity transformation example running you need to do the following steps.
 - Move to OpenOF folder
 
 ----------------------
