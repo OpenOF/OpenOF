@@ -193,7 +193,7 @@ def genOptCodeFuncPtr_h(name):
     outstr+='void set_value_%s_ptr_h(external_device_set_value_func_t* dev_func_ptr);'%name
     return outstr 
 
-def genOptCodeStructFile(names,variables,addVariables,addCode=None,filename='structs'):
+def genOptCodeStructFile(names,variables,addVariables,addCode=None,filename='structs',openof_root=None):
     """
     Method generates C++ code and writes it to structs.h. To generate the code the genOptCodeStruct function is used.
 
@@ -232,15 +232,15 @@ def genOptCodeStructFile(names,variables,addVariables,addCode=None,filename='str
         outstr+=genOptCodeStruct(n, v,a,c)
         outstr+='\n'
     outstr+='#endif'
-    f=open(filename+'.h','w')
+    f=open(openof_root+'/src/Model/'+filename+'.h','w')
     f.write(outstr)
     f.close
-    f=open('structs_in.h','w')
+    f=open(openof_root+'/src/Model/'+'structs_in.h','w')
     f.write('#include "%s.h"'%filename)
     f.close
     return outstr
 
-def genOptCodeStructFuncFile(names,variables):
+def genOptCodeStructFuncFile(names,variables,openof_root):
     """
     Method generates C++ code and writes it to struct_func_src.h. To generate the code, the genOptCodeFuncPtr, genOptCodeSet, genOptCodeFuncPtr_h function is used.
 
@@ -279,7 +279,7 @@ def genOptCodeStructFuncFile(names,variables):
         outstr+='\n'
         
     outstr+='#endif'
-    f=open('structs_func_src.h','w')
+    f=open(openof_root+'/src/Model/'+'structs_func_src.h','w')
     f.write(outstr)
     f.close
     outstr_src=outstr
@@ -293,7 +293,7 @@ def genOptCodeStructFuncFile(names,variables):
         outstr+='\n'
         
     outstr+='#endif'
-    f=open('structs_func_h.h','w')
+    f=open(openof_root+'/src/Model/'+'structs_func_h.h','w')
     f.write(outstr)
     f.close
     
@@ -348,7 +348,7 @@ def genOptCodeMeas(name,optNames,jac):
     outStr+='};\n';
     
     return outStr
-def genOptCodeMeasFile(str): 
+def genOptCodeMeasFile(str,openof_root): 
     """
     Method writes structs_meas.h.
 
@@ -365,7 +365,7 @@ def genOptCodeMeasFile(str):
         outStr+=s
         outStr+='\n'
     outStr+='#endif'
-    f=open('structs_meas.h','w')
+    f=open(openof_root+'/src/Model/'+'structs_meas.h','w')
     f.write(outStr)
     f.close
 def genOptCodeMeasIterator(measFuncName,names,measFuncInputJac,measFuncInputObj):
@@ -802,7 +802,7 @@ def genOptCodeJacMeasPtrH(name):
     outStr+='void %s_jac_ptr_h(external_device_func_jac_t* dev_func_ptr);\n'%name
     return outStr
 
-def genOptCodeFuncMeasFile(str):     
+def genOptCodeFuncMeasFile(str,openof_root):     
     """
     Method writes meas_func_src.h.
 
@@ -817,10 +817,10 @@ def genOptCodeFuncMeasFile(str):
         outStr+=s
         outStr+='\n'
     outStr+='#endif'
-    f=open('meas_func_src.h','w')
+    f=open(openof_root+'/src/Model/'+'meas_func_src.h','w')
     f.write(outStr)
     f.close
-def genOptCodeFuncMeasFileH(str):    
+def genOptCodeFuncMeasFileH(str,openof_root):    
     """
     Method writes meas_func_h.h.
 
@@ -835,7 +835,7 @@ def genOptCodeFuncMeasFileH(str):
         outStr+=s
         outStr+='\n'
     outStr+='#endif'
-    f=open('meas_func_h.h','w')
+    f=open(openof_root+'/src/Model/'+'meas_func_h.h','w')
     f.write(outStr)
     f.close
 def genOptCodeFuncMeasHIterator(measFuncName):
@@ -1074,7 +1074,7 @@ def genOptCodeFillClassH(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasIn
     
     for n in names:
         outStr+='\tstd::vector<%s_t> %s;\n'%(n,n)
-        outStr+='\tstd::vector<%s_t> var_%s;\n'%(n,n)
+#        outStr+='\tstd::vector<%s_t> var_%s;\n'%(n,n)
     
     outStr+='\tstd::vector<MeasurementCombinations_t> measurementCombinations;\n'
     outStr+='\tstd::vector<double> residuals;\n'    
@@ -1251,7 +1251,7 @@ def genOptCodeFill(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd,adva
     
     outStr+='}'
     return outStr
-def genOptCodeOptimizeFile(src,name="optimize"):
+def genOptCodeOptimizeFile(src,name="optimize",openof_root=None):
     """
     Method writes optimizer.cu.
 
@@ -1283,11 +1283,11 @@ def genOptCodeOptimizeFile(src,name="optimize"):
     else:
         outStr+=src
 
-    f=open(name+'.cu','w')
+    f=open(openof_root+'/src/Model/'+name+'.cu','w')
     f.write(outStr)
     f.close
         
-def genOptCodeOptimizeFileH(namesMeasF,src,name="optimize",filenameStruct='structs'):
+def genOptCodeOptimizeFileH(namesMeasF,src,name="optimize",filenameStruct='structs',openof_root=None):
     """
     Method writes optimizer.h.
 
@@ -1322,7 +1322,7 @@ def genOptCodeOptimizeFileH(namesMeasF,src,name="optimize",filenameStruct='struc
     outStr+=sclass
     outStr+='\n'
     outStr+='#endif'
-    f=open(name+'.h','w')
+    f=open(openof_root+'/src/Model/'+name+'.h','w')
     f.write(outStr)
     f.close
 def genOptCodeExtractHeader(namesMeasF,src):
@@ -1351,7 +1351,7 @@ def genOptCodeExtractHeader(namesMeasF,src):
         sp=src.splitlines()
         outStr+= sp[0]+';'
     return outStr      
-def genOptCodePython(names,nameLib,filenameOpt,fct):
+def genOptCodePython(names,nameLib,filenameOpt,fct,openof_root):
     """
     Method that generates the python interfaces for SWIG.
     :param names: Names of the objects.
@@ -1380,10 +1380,10 @@ def genOptCodePython(names,nameLib,filenameOpt,fct):
     outStr+='%template(floatVector) std::vector<float>;\n'
     outStr+='\n'
     outStr+=fct
-    f=open(filenameOpt+'.i','w')
+    f=open(openof_root+'/src/Model/'+filenameOpt+'.i','w')
     f.write(outStr)
     f.close 
-def genOptCodeCMakeLists(libName,libNamePy,filenameOpt):
+def genOptCodeCMakeLists(libName,libNamePy,filenameOpt,openof_root):
     """
     creates the CMakeLists.txt for library.
     :param libName: name of the C++ library.
@@ -1391,15 +1391,15 @@ def genOptCodeCMakeLists(libName,libNamePy,filenameOpt):
     :param filenameOpt: name of the file that contains the minimize method.
     """
     
-    fin=open('../Generator/CMakeLists.tpl','r')
-    fout=open('CMakeLists.txt','w')
+    fin=open(openof_root+'/Generator/CMakeLists.tpl','r')
+    fout=open(openof_root+'CMakeLists.txt','w')
     str=fin.read()
     strOut=str%(libName,libName,filenameOpt,libName,filenameOpt,filenameOpt,libNamePy,filenameOpt,filenameOpt,libNamePy,libName,libNamePy)
     fout.write(strOut)
     fin.close()
     fout.close()
     
-def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,measFuncInputObj,measFuncInputObjOpt,measFuncObjOpt,filename_structs='structs',min_function_name='minimize',min_class_name='Minimizer',filename_cpp='optimize',libname_python='OptimizerPy',libname_cpp='Optimizer',debug=False,clear_model_folder=False):
+def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,measFuncInputObj,measFuncInputObjOpt,measFuncObjOpt,filename_structs='structs',min_function_name='minimize',min_class_name='Minimizer',filename_cpp='optimize',libname_python='OptimizerPy',libname_cpp='Optimizer',debug=False,clear_model_folder=False,openof_root='../'):
     measFuncInputJac=[]
     for i,f,o in zip(range(len(measFuncInputF)),measFuncInputF,measFuncInputObjOpt):
         var=''
@@ -1423,39 +1423,40 @@ def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,meas
         jac=f.jacobian(var_sympy)
         measFuncInputJac.append(jac)
     
+    if clear_model_folder:
+        for f in glob.glob(openof_root+'/src/Model/*'):
+            if f.find('README')<0:
+	            os.remove(f)
+    genOptCodeStructFuncFile(names,variables,openof_root=openof_root)
+    genOptCodeStructFile(names,variables,addVariables,addCode,filename=filename_structs,openof_root=openof_root)
     
-    genOptCodeStructFuncFile(names,variables)
-    genOptCodeStructFile(names,variables,addVariables,addCode,filename=filename_structs)
-    
-    genOptCodeMeasFile(str for str in genOptCodeMeasIterator(measFuncName,names,measFuncInputJac,measFuncInputObj))
-    genOptCodeFuncMeasFile((str for str in genOptCodeFuncMeasIterator(measFuncName, names, variables, addVariables, measFuncInputF, measFuncInputJac, measFuncInputObj, measFuncInputObjOpt,debug=debug)))
-    genOptCodeFuncMeasFileH((str for str in genOptCodeFuncMeasHIterator(measFuncName)))                                                                     
+    genOptCodeMeasFile((str for str in genOptCodeMeasIterator(measFuncName,names,measFuncInputJac,measFuncInputObj)),openof_root=openof_root)
+    genOptCodeFuncMeasFile((str for str in genOptCodeFuncMeasIterator(measFuncName, names, variables, addVariables, measFuncInputF, measFuncInputJac, measFuncInputObj, measFuncInputObjOpt,debug=debug)),openof_root=openof_root)
+    genOptCodeFuncMeasFileH((str for str in genOptCodeFuncMeasHIterator(measFuncName)),openof_root=openof_root)                                                                     
     
     
     genOptCodeOptimizeFile([genOptCodeFill(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,advance=True,name=min_function_name)\
-                            ,genOptCodeFillClass(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,name=min_class_name)],name=filename_cpp)
+                            ,genOptCodeFillClass(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,name=min_class_name)],name=filename_cpp,openof_root=openof_root)
     genOptCodeOptimizeFileH(measFuncName,[genOptCodeFill(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,advance=True,name=min_function_name)\
-                                          ,genOptCodeFillClassH(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,name=min_class_name)],name=filename_cpp,filenameStruct=filename_structs)
+                                          ,genOptCodeFillClassH(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,name=min_class_name)],name=filename_cpp,filenameStruct=filename_structs,openof_root=openof_root)
     header=genOptCodeExtractHeader(measFuncName,[genOptCodeFill(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,advance=True,name=min_function_name)\
                                           ,genOptCodeFillClassH(names,measFuncName,measFuncName,measFuncObjOpt,measFuncInputObj,name=min_class_name)])
-    genOptCodePython(names,libname_python,filename_cpp,header)
-    genOptCodeCMakeLists(libname_cpp,libname_python,filename_cpp)
+    genOptCodePython(names,libname_python,filename_cpp,header,openof_root=openof_root)
+    genOptCodeCMakeLists(libname_cpp,libname_python,filename_cpp,openof_root=openof_root)
     
-    shutil.copy('CMakeLists.txt','../')
-    os.remove('CMakeLists.txt')
-    if clear_model_folder:
-        for f in glob.glob('../src/Model/*'):
-            os.remove(f)
+#    shutil.copy('CMakeLists.txt',openof_root)
+#    os.remove('CMakeLists.txt')
+
         
-    for f in glob.glob('*.h'):
-        shutil.copy(f,'../src/Model/')
-        os.remove(f)
-    for f in glob.glob('*.cu'):
-        shutil.copy(f,'../src/Model/')
-        os.remove(f)
-    for f in glob.glob('*.i'):
-        shutil.copy(f,'../src/Model/')
-        os.remove(f)   
+#    for f in glob.glob('*.h'):
+#        shutil.copy(f,openof_root+'/src/Model/')
+#        os.remove(f)
+#    for f in glob.glob('*.cu'):
+#        shutil.copy(f,openof_root+'/src/Model/')
+#        os.remove(f)
+#    for f in glob.glob('*.i'):
+#        shutil.copy(f,openof_root+'/src/Model/')
+#        os.remove(f)   
     
  
     

@@ -107,7 +107,7 @@ def getFInv():
     pt3c[3]=pt3c[3]-CZ2
     pt3c2=qq2*pt3c*qq2.conj()
     
-    fx,fy,u0,v0,s,k1,k2,k3=sympy.symbols('v5_fx,v5_fy,v5_u0,v5_v0,v5_s,v5_k1,v5_k2,v5_k3')
+    fx,fy,u0,v0,s,k1=sympy.symbols('v5_fx,v5_fy,v5_u0,v5_v0,v5_s,v5_k1')
     
     
     ptx=pt3c2[1]/pt3c2[3]
@@ -118,7 +118,11 @@ def getFInv():
 
     pt=sympy.Matrix([ptx2,pty2])
 
-    ptx,pty=sympy.symbols('v1_x, v1_y')
+    ptxd,ptyd=sympy.symbols('v1_x, v1_y')
+    r2=k1*(ptxd*ptx+ptyd*ptyd)
+    ptx=(1.0+r2)*ptxd
+    pty=(1.0+r2)*ptyd
+    
     pt[0]=((ptx-pt[0]))
     pt[1]=((pty-pt[1]))
     
@@ -154,7 +158,7 @@ if __name__ == '__main__':
     f3=getFQuat()
        
     names=['pt2','invDepth','cam','cam_in','pt3']
-    variables=['x,y',['d'],'CX,CY,CZ,q1,q2,q3,q4','fx,fy,u0,v0,k1,k2,k3','X,Y,Z']
+    variables=['x,y',['d'],'CX,CY,CZ,q1,q2,q3,q4','fx,fy,u0,v0,k1','X,Y,Z']
     addVariables=('','X,Y,Z','',['s'],'')
     addCode=('int id;','int id;\nint r,g,b;','','','int id;\nint r,g,b;')
 
@@ -180,7 +184,8 @@ if __name__ == '__main__':
        filename_cpp='optimize',\
        libname_python='OptimizerGPUPy',\
        libname_cpp='OptimizerGPU',\
-       clear_model_folder=True)
+       clear_model_folder=True,\
+       openof_root='../')
     
     
 

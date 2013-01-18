@@ -107,5 +107,6 @@ if __name__ == '__main__':
            filename_cpp='optimizeSimTrans',\
            libname_python='OptimizerSimTransPy',\
            libname_cpp='OptimizerSimTrans',\
-           clear_model_folder=True)
+           clear_model_folder=True,\
+           openof_root='../')
 

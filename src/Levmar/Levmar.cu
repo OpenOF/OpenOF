@@ -221,8 +221,8 @@ int Levmar::insertMeasObj(MeasurementStruct_t *m,std::vector<oof_float> &inv_cov
 int Levmar::initMemory(){
 
 	if (verbose>0)	std::cout<<"nrParameters:"<<nrParaOpt<<"\n";
-	if (verbose>0)	std::cout<<"nrParaJac"<<nrParaJac<<"\n";
-	if (verbose>0)	std::cout<<"nrParaFunc"<<nrParaFunc<<"\n";
+	if (verbose>0)	std::cout<<"nrParaJac:"<<nrParaJac<<"\n";
+	if (verbose>0)	std::cout<<"nrParaFunc:"<<nrParaFunc<<"\n";
 	d_weightVec.resize(nrParaFunc);
 	d_funcVec.resize(nrParaFunc);
 	h_funcVec.resize(nrParaFunc);
