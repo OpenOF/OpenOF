@@ -1399,7 +1399,7 @@ def genOptCodeCMakeLists(libName,libNamePy,filenameOpt,openof_root):
     fin.close()
     fout.close()
     
-def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,measFuncInputObj,measFuncInputObjOpt,measFuncObjOpt,filename_structs='structs',min_function_name='minimize',min_class_name='Minimizer',filename_cpp='optimize',libname_python='OptimizerPy',libname_cpp='Optimizer',debug=False,clear_model_folder=False,openof_root='../'):
+def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,measFuncInputObj,measFuncInputObjOpt,measFuncObjOpt,addFunc=[],filename_structs='structs',min_function_name='minimize',min_class_name='Minimizer',filename_cpp='optimize',libname_python='OptimizerPy',libname_cpp='Optimizer',debug=False,clear_model_folder=False,openof_root='../'):
     measFuncInputJac=[]
     for i,f,o in zip(range(len(measFuncInputF)),measFuncInputF,measFuncInputObjOpt):
         var=''
@@ -1417,7 +1417,11 @@ def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,meas
             else:
                 var+=','+varstr
         print var
-        var_sympy=sympy.Matrix(sympy.symbols(var))
+	if len(var.split(','))==1:
+		var_sympy=sympy.Matrix([sympy.symbols(var)])
+		print var_sympy
+	else:
+	        var_sympy=sympy.Matrix(sympy.symbols(var))
         
         
         jac=f.jacobian(var_sympy)
@@ -1431,7 +1435,7 @@ def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,meas
     genOptCodeStructFile(names,variables,addVariables,addCode,filename=filename_structs,openof_root=openof_root)
     
     genOptCodeMeasFile((str for str in genOptCodeMeasIterator(measFuncName,names,measFuncInputJac,measFuncInputObj)),openof_root=openof_root)
-    genOptCodeFuncMeasFile((str for str in genOptCodeFuncMeasIterator(measFuncName, names, variables, addVariables, measFuncInputF, measFuncInputJac, measFuncInputObj, measFuncInputObjOpt,debug=debug)),openof_root=openof_root)
+    genOptCodeFuncMeasFile((str for str in genOptCodeFuncMeasIterator(measFuncName, names, variables, addVariables, measFuncInputF, measFuncInputJac, measFuncInputObj, measFuncInputObjOpt,addFunc,debug=debug)),openof_root=openof_root)
     genOptCodeFuncMeasFileH((str for str in genOptCodeFuncMeasHIterator(measFuncName)),openof_root=openof_root)                                                                     
     
     
