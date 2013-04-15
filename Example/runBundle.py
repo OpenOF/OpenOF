@@ -37,14 +37,14 @@ def runBundle(filename):
 
     if unique_calib:
         print('Bundle with a unique calibration')
-	print('the distortion parameters are currently not modelled')
+        print('the distortion parameters are currently not modelled')
         calib=opt.cam_in_t()
         calib.fx=float(lines[0].split(' ')[2])
         calib.fy=float(lines[0].split(' ')[4])
         '''the princple point is already substracted from the measurements in the nvm file '''
-	calib.u0=0.0
+        calib.u0=0.0
         calib.v0=0.0
-	calib.k1=0.0
+        calib.k1=0.0
 #        calib.u0=float(lines[0].split(' ')[3])
 #        calib.v0=float(lines[0].split(' ')[5])
         
@@ -82,12 +82,12 @@ def runBundle(filename):
 	
 
 	'''create a measurement combination which forces the quaternion of the camera to be of unit length'''
-        m=opt.MeasurementCombinations_t()
+	m=opt.MeasurementCombinations_t()
 	m.type=opt.eQuat
-	m.v1=min.cam.size()-1
+	m.v.push_back(min.cam.size()-1)
 	'''set a high weight'''
 	m.inv_cov.push_back(1000)
-        min.measurementCombinations.push_back(m)
+	min.measurementCombinations.push_back(m)
 
     
     num_points=int(lines[4+num_cams])
@@ -121,14 +121,14 @@ def runBundle(filename):
             '''create a measurement combination for each observation'''
             m=opt.MeasurementCombinations_t()
             m.type=opt.eProjectMetric
-            m.v1=min.pt2.size()-1
-            m.v2=min.pt3.size()-1
-            m.v3=cam_ind
+            m.v.push_back(min.pt2.size()-1)
+            m.v.push_back(min.pt3.size()-1)
+            m.v.push_back(cam_ind)
             '''calibration index is zero since only one calibration is used'''
             if unique_calib:
-		m.v4=0
+				m.v.push_back(0)
             else:		
-            	m.v4=cam_ind
+            	m.v.push_back(cam_ind)
             
             min.measurementCombinations.push_back(m)
             

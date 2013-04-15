@@ -1,6 +1,6 @@
 OpenOF: Framework for Sparse Non-linear Least Squares Optimization on a GPU
 ===================================================
-Version 0.1
+Version 0.1.1
 
 Hardware requirements:
 ------------------------------------------

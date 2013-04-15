@@ -332,15 +332,31 @@ def genOptCodeMeas(name,optNames,jac):
     nrPara=jac.shape[1]
     nrNonZeroJac=countNonZero(jac)
     outStr='struct Measurement_%s_t:MeasurementStruct_t{\n'%name
-    outStr+='\tMeasurement_%s_t(external_device_func_t* func,external_device_func_jac_t* func_jac,'%name
-    for i in range(len(optNames)):
-        outStr+='%s_t *_v%d' % (optNames[i],i+1)
-        if i!=len(optNames)-1:
-            outStr+=','
-    outStr+='){\n'
+    #outStr+='\tMeasurement_%s_t(external_device_func_t* func,external_device_func_jac_t* func_jac,'%name
+    outStr+='\tMeasurement_%s_t(external_device_func_t* func,external_device_func_jac_t* func_jac,void **_v)'%name
+#    for i in range(len(optNames)):
+#        outStr+='%s_t *_v%d' % (optNames[i],i+1)
+#        if i!=len(optNames)-1:
+#            outStr+=','
+#    outStr+='){\n'
+    outStr+='{\n'
     outStr+='\t\tm_func=func;\n\t\tm_func_jac=func_jac;\n'
-    for i in range(len(optNames)):
-        outStr+='\t\tv%d=(void *)_v%d;\n'%(i+1,i+1)
+    #for i in range(len(optNames)):
+    #    outStr+='\t\tv%d=(void *)_v%d;\n'%(i+1,i+1)
+    
+#    outStr+='\t\tvoid **v_temp=(void**)malloc(%d * sizeof(void*));\n'%len(optNames)
+#    for i in range(len(optNames)):
+#        outStr+='\t\tv_temp[%d]=(void *)_v%d;\n'%(i,i+1);
+#    outStr+='#ifdef USE_GPU\n'
+#    outStr+='\t\tcudaMalloc((void**)&v, %d*sizeof(void*));\n'%len(optNames)    
+#    outStr+='\t\tcudaMemcpy(v,v_temp,%d*sizeof(void*),cudaMemcpyHostToDevice);\n'%len(optNames)
+#    outStr+='\t\t delete[] v_temp;\n'
+#    outStr+='#else\n'
+#    outStr+='\t\tv=v_temp;\n';
+ #   outStr+='#endif\n'
+    outStr+='\t\tv=_v;\n';
+        
+    #outStr+='\t\tnr_opt_obj=%d;\n'%len(optNames)
     outStr+='\t\tnr_row=%d;\n'%nrFunc
     outStr+='\t\tnr_para=%d;\n'%nrPara
     outStr+='\t\tnr_nonzero_jac=%d;\n'%nrNonZeroJac
@@ -445,15 +461,15 @@ def genOptCodeFuncMeas(name,f,namesOpt,variablesOpt,addVariables,debug=False):
     outStr='__host__ __device__\n'
     outStr+='void %s('%name
     
-    for i in range(1,NR_OPT_PARA+1):
-        outStr+='void * _v%d,'%i
+    #for i in range(1,NR_OPT_PARA+1):
+    outStr+='void ** v,'
     #void * _v1, void * _v2,void * _v3, void * _v4,void * _v5
     outStr+='oof_float* func_result){\n'
     for i,no,vs,avs in zip(range(len(namesOpt)),namesOpt,variablesOpt,addVariables):
         #print vs
         
         outStr+='\n'
-        outStr+='\t%s_t *v%d=(%s_t *) _v%d;\n'%(no,i+1,no,i+1)
+        outStr+='\t%s_t *v%d=(%s_t *) v[%d];\n'%(no,i+1,no,i)
         outStr+='\n'
         if vs is not None and len(vs)>0:
             var=sympy.symbols(vs)
@@ -545,15 +561,15 @@ def genOptCodeJacMeas(name,jac,namesOpt,variablesOpt,addVariables,jacOrder=None)
         jacOrder=range(len(namesOpt))
     outStr='__host__ __device__\n'
     outStr+='void %s_jac('%name
-    for i in range(1,NR_OPT_PARA+1):
-        outStr+='void * _v%d,'%i
+    #for i in range(1,NR_OPT_PARA+1):
+    outStr+='void ** v,'
      #void * _v2,void * _v3, void * _v4,void * _v5,
     outStr+='int rowStart,oof_float * jac_value, int* jac_row_ind,int* jac_col_ind){\n'
     for i,no,vs,avs in zip(range(len(namesOpt)),namesOpt,variablesOpt,addVariables):
         #print vs
         
         outStr+='\n'
-        outStr+='\t%s_t *v%d=(%s_t *) _v%d;\n'%(no,i+1,no,i+1)
+        outStr+='\t%s_t *v%d=(%s_t *) v[%d];\n'%(no,i+1,no,i)
         outStr+='\n'
 #        if vs is not None  and len(vs)>0:
 #            var=sympy.symbols(vs)
@@ -958,14 +974,27 @@ def genOptCodeFillClass(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd
     outStr+='\n'
     outStr+='\tthrust::host_vector<MeasurementStruct_t> h_MeasVec(measurementCombinations.size());\n'
     outStr+='\n'
+    outStr+='\tint nr_pointer=0;\n'
+    outStr+='\tfor(int i=0;i<measurementCombinations.size();i++){\n'
+    outStr+='\t\tnr_pointer+=measurementCombinations[i].v.size();\n'
+    outStr+='\t}\n'
+    outStr+='\tint current_pointer_index=0;\n'
+    
+    outStr+='\tvoid **v_temp=(void**)malloc(nr_pointer * sizeof(void*));\n'
+    outStr+='\tvoid **v;\n'
+    outStr+='#ifdef USE_GPU\n'
+    outStr+='\tcudaMalloc((void**)&v, nr_pointer*sizeof(void*));\n'
+    outStr+='#else\n'
+    outStr+='\tv=v_temp;\n'
+    outStr+='#endif\n'
     outStr+='\tfor(int i=0;i<measurementCombinations.size();i++){\n'
     outStr+='\t\tint type=measurementCombinations[i].type;\n'
     for nf,nj,ind,i in zip(namesMeasF,namesMeasJac,namePerMeasInd,range(len(namesMeasF))):
         outStr+='\t\tif (type==%d){\n'%i
-        outStr+='\t\t\tMeasurement_%s_t m(func%s,jac%s\n'%(nf,nf,nj)
+        outStr+='\t\t\tMeasurement_%s_t m(func%s,jac%s,&v[current_pointer_index]);\n'%(nf,nf,nj)
         for nameInd,j in zip(ind,range(len(ind))):
-            outStr+='\t\t\t\t,thrust::raw_pointer_cast(&d_%s[measurementCombinations[i].v%d])\n'%(names[nameInd],j+1)
-        outStr+='\t\t\t\t);\n'
+            outStr+='\t\t\t\tv_temp[current_pointer_index+%d]=thrust::raw_pointer_cast(&d_%s[measurementCombinations[i].v[%d]]);\n'%(j,names[nameInd],j)
+        
         outStr+='\t\t\tm.robust=measurementCombinations[i].robust;\n'
         outStr+='\t\t\tm.robust_para_a=measurementCombinations[i].robust_para_a;\n'
         outStr+='\t\t\tm.robust_para_b=measurementCombinations[i].robust_para_b;\n'
@@ -973,7 +1002,11 @@ def genOptCodeFillClass(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd
         outStr+='\t\t\tmyLevmar.registerMeasObj(&m);\n'
         outStr+='\t\t\th_MeasVec[i]=m;\n'
         outStr+='\t\t}\n'
-    outStr+='\t}\n'        
+    outStr+='\t\tcurrent_pointer_index+=measurementCombinations[i].v.size();\n'
+    outStr+='\t}\n'  
+    outStr+='#ifdef USE_GPU\n'
+    outStr+='cudaMemcpy(v,v_temp,nr_pointer*sizeof(void*),cudaMemcpyHostToDevice);\n'
+    outStr+='#endif\n'        
     outStr+='\tmyLevmar.initMemory();\n\n'
 
     for ind in optNamesInd:
@@ -1014,6 +1047,8 @@ def genOptCodeFillClass(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd
 #    outStr+='\t}\n'
     
     outStr+='#ifdef USE_GPU\n'
+    outStr+='\tstatus = cudaFree(v);\n'
+    outStr+='\tdelete [] v_temp;\n'
     for n in namesMeasF:
         outStr+='\tstatus = cudaFree(func%s);\n'%n
     for n in namesMeasJac:
@@ -1186,14 +1221,26 @@ def genOptCodeFill(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd,adva
     outStr+='\n'
     outStr+='\tthrust::host_vector<MeasurementStruct_t> h_MeasVec(measurementCombinations.size());\n'
     outStr+='\n'
+    outStr+='\tint nr_pointer=0;\n'
+    outStr+='\tfor(int i=0;i<measurementCombinations.size();i++){\n'
+    outStr+='\t\tnr_pointer+=measurementCombinations[i].v.size();\n'
+    outStr+='\t}\n'
+    outStr+='\tint current_pointer_index=0;\n'
+    outStr+='\tvoid **v_temp=(void**)malloc(nr_pointer * sizeof(void*));\n'
+    outStr+='\tvoid **v;\n'
+    outStr+='#ifdef USE_GPU\n'
+    outStr+='\tcudaMalloc((void**)&v, nr_pointer*sizeof(void*));\n'
+    outStr+='#else\n'
+    outStr+='\tv=v_temp;\n'
+    outStr+='#endif\n'
     outStr+='\tfor(int i=0;i<measurementCombinations.size();i++){\n'
     outStr+='\t\tint type=measurementCombinations[i].type;\n'
     for nf,nj,ind,i in zip(namesMeasF,namesMeasJac,namePerMeasInd,range(len(namesMeasF))):
         outStr+='\t\tif (type==%d){\n'%i
-        outStr+='\t\t\tMeasurement_%s_t m(func%s,jac%s\n'%(nf,nf,nj)
+        outStr+='\t\t\tMeasurement_%s_t m(func%s,jac%s,&v[current_pointer_index]);\n'%(nf,nf,nj)
         for nameInd,j in zip(ind,range(len(ind))):
-            outStr+='\t\t\t\t,thrust::raw_pointer_cast(&d_%s[measurementCombinations[i].v%d])\n'%(names[nameInd],j+1)
-        outStr+='\t\t\t\t);\n'
+            outStr+='\t\t\t\tv_temp[current_pointer_index+%d]=thrust::raw_pointer_cast(&d_%s[measurementCombinations[i].v[%d]]);\n'%(j,names[nameInd],j)
+        
         outStr+='\t\t\tm.robust=measurementCombinations[i].robust;\n'
         outStr+='\t\t\tm.robust_para_a=measurementCombinations[i].robust_para_a;\n'
         outStr+='\t\t\tm.robust_para_b=measurementCombinations[i].robust_para_b;\n'
@@ -1201,7 +1248,13 @@ def genOptCodeFill(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd,adva
         outStr+='\t\t\tmyLevmar.registerMeasObj(&m);\n'
         outStr+='\t\t\th_MeasVec[i]=m;\n'
         outStr+='\t\t}\n'
-    outStr+='\t}\n'        
+    outStr+='\t\tcurrent_pointer_index+=measurementCombinations[i].v.size();\n'
+    outStr+='\t}\n'  
+    
+            
+    outStr+='#ifdef USE_GPU\n'
+    outStr+='cudaMemcpy(v,v_temp,nr_pointer*sizeof(void*),cudaMemcpyHostToDevice);\n'
+    outStr+='#endif\n'
     outStr+='\tmyLevmar.initMemory();\n\n'
 
     for ind in optNamesInd:
@@ -1230,7 +1283,10 @@ def genOptCodeFill(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd,adva
         outStr+='\tresiduals.resize(myLevmar.residuals.size());\n'
         outStr+='\tstd::copy(myLevmar.residuals.begin(),myLevmar.residuals.end(),residuals.begin());\n'
 
+    outStr+='\tdelete [] v_temp;\n'
     outStr+='#ifdef USE_GPU\n'
+    outStr+='\tstatus = cudaFree(v);\n'
+    
     for n in namesMeasF:
         outStr+='\tstatus = cudaFree(func%s);\n'%n
     for n in namesMeasJac:
@@ -1378,6 +1434,7 @@ def genOptCodePython(names,nameLib,filenameOpt,fct,openof_root):
     outStr+='%template(MeasurementCombinationsVector) std::vector<MeasurementCombinations_t>;\n'
     outStr+='%template(doubleVector) std::vector<double>;\n'
     outStr+='%template(floatVector) std::vector<float>;\n'
+    outStr+='%template(intVector) std::vector<int>;\n'
     outStr+='\n'
     outStr+=fct
     f=open(openof_root+'/src/Model/'+filenameOpt+'.i','w')

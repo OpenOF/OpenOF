@@ -28,9 +28,9 @@
 typedef double oof_float;
 
 /*If enabled the host memory is uses for the measurement structs, for everything else the memory which is assigned below is used */
-//#define useHostMemory 
+//#define useHostMemory
 
 //for small least squares adjustment the cpu can be used as well (EXPERIMENTAL) (comment line below)
-#define USE_GPU	
+#define USE_GPU
 
 #endif /* FUNCTORS_H_ */

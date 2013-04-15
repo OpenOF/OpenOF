@@ -64,15 +64,15 @@ def similarityTransformation(pt1,pt2):
         
         m=opt.MeasurementCombinations_t()
         m.type=opt.eSimilarityTransformation
-        m.v1=2*i
-        m.v2=2*i+1
-        m.v3=0
+        m.v.push_back(2*i)
+        m.v.push_back(2*i+1)
+        m.v.push_back(0)
         meas.push_back(m)
                 
     res=opt.doubleVector()
     m=opt.MeasurementCombinations_t()
     m.type=opt.eQuat
-    m.v1=0
+    m.v.push_back(0)
     meas.push_back(m)
     opt.minimize_simtrans(pt1V,transV,meas,1000,res)
     

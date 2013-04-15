@@ -25,9 +25,11 @@
 #define LEVMAR_STRUTCS_H_
 
 #include "config.h"
+#include <stdio.h>
+
 typedef void(*external_device_set_value_func_t) (void * v1,int ind,oof_float &value,bool set);
-typedef void(*external_device_func_t) (void * v1,void * v2,void * v3,void * v4,void * v5,void * v6,void * v7,void * v8,void * v9,void * v10,oof_float * func_result);
-typedef void(*external_device_func_jac_t) (void * v1,void * v2,void * v3,void * v4,void * v5,void * v6,void * v7,void * v8,void * v9,void * v10,int rowStart,oof_float * jac_value, int* jac_row_ind,int* jac_col_ind);
+typedef void(*external_device_func_t) (void ** v,oof_float * func_result);
+typedef void(*external_device_func_jac_t) (void ** v,int rowStart,oof_float * jac_value, int* jac_row_ind,int* jac_col_ind);
 
 
 
@@ -56,17 +58,7 @@ struct ValueStruct_t{
 };
 struct MeasurementStruct_t{
 
-	void * v1;
-	void * v2;
-	void * v3;
-	void * v4;
-	void * v5;
-	void * v6;
-	void * v7;
-	void * v8;
-	void * v9;
-	void * v10;
-
+	void ** v;
 
 	int robust;
 	oof_float robust_para_a;
@@ -87,7 +79,7 @@ struct MeasurementStruct_t{
 	int startJac;
 	external_device_func_t* m_func;
 	external_device_func_jac_t* m_func_jac;
-	MeasurementStruct_t():v1(0),v2(0),v3(0),v4(0),v5(0),v6(0),v7(0),v8(0),v9(0),v10(0),globalStart(0),func_result(0),jac_value(0),jac_row_ind(0),jac_col_ind(0){
+	MeasurementStruct_t():v(0),globalStart(0),func_result(0),jac_value(0),jac_row_ind(0),jac_col_ind(0){
 		robust=0;
 		robust_para_a=0;
 		robust_para_b=0;
@@ -98,14 +90,17 @@ struct MeasurementStruct_t{
 	__host__ __device__
 	void operator()()
 	{
-		(**m_func)(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,func_result);
+
+		(**m_func)(v,func_result);
 	}
 	__host__ __device__
 	void jac()
 	{
-		(**m_func_jac)(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,globalStart,jac_value,jac_row_ind,jac_col_ind);
+
+		(**m_func_jac)(v,globalStart,jac_value,jac_row_ind,jac_col_ind);
 
 	}
+
 
 };
 

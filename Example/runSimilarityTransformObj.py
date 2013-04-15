@@ -36,12 +36,12 @@ def similarityTransformation(pt1,pt2):
     min.verbose=1
     '''termination values of the levenberg marquardt algorithm'''
 
-    min.eps1=1e-15
-    min.eps2=1e-15
+    min.eps1=1e-10
+    min.eps2=1e-10
     '''maximum number of iterations'''
     min.kmax=100
     min.cg_it=150
-    min.cg_thresh_abs=0.0
+    min.cg_thresh_abs=1e-12
     
     '''vector of the 3D points struct, to fill the values'''
     pt1V=min.pt3
@@ -85,19 +85,21 @@ def similarityTransformation(pt1,pt2):
         m.type=opt.eSimilarityTransformation
         #m.robust=opt.OF_SORT_WEIGHT
         #m.robust_para_a=1
-        m.v1=2*i
-        m.v2=2*i+1
-        m.v3=0
+        m.v.push_back(2*i)
+        m.v.push_back(2*i+1)
+        m.v.push_back(0)
         meas.push_back(m)
                 
     '''inclue a measurement struct for the Quaternion'''
     m=opt.MeasurementCombinations_t()
     m.type=opt.eQuat
     '''the value corresponds to the index in the corresponding vector'''
-    m.v1=0
+    m.v.push_back(0)
     '''a inverse covariance can be set for each error/cost function'''
-    m.inv_cov.push_back(10);
+    #m.inv_cov.push_back(10);
     meas.push_back(m)
+    min.verbose=0
+    min.kmax=100
     min.run()
     
     res=min.residuals

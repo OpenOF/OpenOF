@@ -498,6 +498,7 @@ int Levmar::run(){
         cusp::coo_matrix<int, oof_float, cusp_memory> M;
         getDiagonalPrec(jact,invCovRobust,M);
         // SOLVE jact * W * jac    * h  = - g
+
         clock_gettime(CLOCK_REALTIME, &te);
     	if (verbose>3) std::cout<<"Solve Normal EQ start:"<<(double)(te.tv_sec - ts.tv_sec)<<"sec + "<<(double)(te.tv_nsec - ts.tv_nsec)/1000000 <<"ms\n";
   	    //cusp::krylov::cg(jtj_mueI, h, g,monitor,M);
@@ -659,6 +660,7 @@ int Levmar::run(){
 }
 
 Levmar::~Levmar() {
+
 }
 
 

@@ -37,17 +37,8 @@ struct MeasurementCombinations_t{
 	oof_float robust_para_a;
 	oof_float robust_para_b;
 	oof_float robust_para_c;
-	int v1;
-	int v2;
-	int v3;
-	int v4;
-	int v5;
-	int v6;
-	int v7;
-	int v8;
-	int v9;
-	int v10;
 
+	std::vector<int> v;
 	std::vector< oof_float > inv_cov;
 	std::vector< oof_float > res;
 	MeasurementCombinations_t(){
@@ -56,30 +47,21 @@ struct MeasurementCombinations_t{
 		robust_para_a=0;
 		robust_para_b=0;
 		robust_para_c=0;
-		v1=0;
-		v2=0;
-		v3=0;
-		v4=0;
-		v5=0;
-		v6=0;
-		v7=0;
-		v8=0;
-		v9=0;
-		v10=0;
 
 	}
 	MeasurementCombinations_t(int _type,int _v1,int _v2,int _v3,int _v4,int _v5,int _v6,int _v7,int _v8,int _v9,int _v10){
 		type=_type;
-		v1=_v1;
-		v2=_v2;
-		v3=_v3;
-		v4=_v4;
-		v5=_v5;
-		v6=_v6;
-		v7=_v7;
-		v8=_v8;
-		v9=_v9;
-		v10=_v10;
+		v.push_back(_v1);
+		v.push_back(_v2);
+		v.push_back(_v3);
+		v.push_back(_v4);
+		v.push_back(_v5);
+		v.push_back(_v6);
+		v.push_back(_v7);
+		v.push_back(_v8);
+		v.push_back(_v9);
+		v.push_back(_v10);
+
 		robust=0;
 		robust_para_a=0;
 		robust_para_b=0;
