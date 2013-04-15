@@ -89,17 +89,20 @@ A more complex example is under Example/bundle.py (design) and Example/runBundle
 Trouble Shooting:
 ------------------------------------------
 
-
-In case you have version 0.7.2 of sympy you can downgrade with the following command:
+- In case you have version 0.7.2 of sympy you can downgrade with the following command:
 
 ------------
 >
 > $ sudo pip install sympy==0.7.1
 
 ------------
-Cuda 5 does not come with Thrust 1.6, please exchange the thrust version usually under /usr/local/cuda/include/thrust.
+- Cuda 5 does not come with Thrust 1.6, please exchange the thrust version usually under /usr/local/cuda/include/thrust.
+- Cuda 5 is not working with gcc version 4.7 or higher. Try using an older gcc version.
+- Compiler error: /bin/sh: 1: Syntax error: "(" unexpected.
+      
+      Make sure the path of the library doesn't contain any brackets.
 
-Cuda 5 is not working with gcc version 4.7 or higher. Try using an older gcc version.
+
 
 
 
