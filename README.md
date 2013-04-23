@@ -25,7 +25,7 @@ If you use OpenOF for your research please cite:
 
 Cornelius Wefelscheid and Olaf Hellwich
 OpenOF: Framework for sparse non-linear least squares optimization on a gpu.
-VISAPP 2013
+VISAPP 2013 [[pdf]](http://www.cv.tu-berlin.de/fileadmin/fg140/OpenOF.pdf)
 
 License:
 ------------------------------------------
