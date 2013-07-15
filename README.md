@@ -13,7 +13,9 @@ Software requirements:
 The framework was tested using Ubuntu 12.04, 64 bit and libraries with the following version number.
 - CUDA 5
 - Python 2.7
-- sympy 0.7.1  It is recommended to use this version as the sympy.cse function in version 0.7.2 does not work for some expression (http://www.mail-archive.com/sympy@googlegroups.com/msg15986.html).
+- sympy 0.7.1 or 0.7.3
+
+  It is recommended to use this version as the sympy.cse function in version 0.7.2 does not work for some expression (http://www.mail-archive.com/sympy@googlegroups.com/msg15986.html).
 - Thrust 1.6
 - CUSP 0.3
 - numpy 1.6.1
@@ -89,13 +91,14 @@ A more complex example is under Example/bundle.py (design) and Example/runBundle
 Trouble Shooting:
 ------------------------------------------
 
-- In case you have version 0.7.2 of sympy you can downgrade with the following command:
+- In case you have version 0.7.2 of sympy you can downgrade with the following command
 
 ------------
 >
 > $ sudo pip install sympy==0.7.1
 
 ------------
+or upgrade to version 0.7.3.
 - Cuda 5 does not come with Thrust 1.6, please exchange the thrust version usually under /usr/local/cuda/include/thrust.
 - Cuda 5 is not working with gcc version 4.7 or higher. Try using an older gcc version.
 - Compiler error: /bin/sh: 1: Syntax error: "(" unexpected.
