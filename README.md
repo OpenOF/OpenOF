@@ -51,7 +51,7 @@ License:
 Getting started:
 ------------------------------------------
 
-OpenOF comes with two examples, similarity transformation and bundle adjustement. To get started we recommend looking in the simpler model of the similarity transformation. To get the similarity transformation example running you need to do the following steps.
+OpenOF comes with two examples, similarity transformation and bundle adjustement. To get started we recommend looking into the simpler model of the similarity transformation. To get the similarity transformation example running you need to execute the following commands.
 - Move to OpenOF folder
 
 ----------------------
@@ -69,7 +69,7 @@ OpenOF comes with two examples, similarity transformation and bundle adjustement
 
 A C++ library as well as a Python library was created.
 
-An example how to use the Python library can be found under ./Example
+An example how to use the Python library can be found under ./Example.
 To run the Example proceed as follows:
 
 ------------
