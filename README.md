@@ -50,12 +50,19 @@ Getting started:
 ------------------------------------------
 
 OpenOF comes with two examples, similarity transformation and bundle adjustement. To get started we recommend looking into the simpler model of the similarity transformation. To get the similarity transformation example running you need to execute the following commands.
-- Move to OpenOF folder
 
 ----------------------
+> $ git clone https://github.com/OpenOF/OpenOF.git
+>
+> $ cd OpenOF
+>
+> $ git submodule init
+>
+> $ git submodule update
+>
 > $ cd Example
 > 
-> $ python similarityTransform.py
+> $ python3 similarityTransform.py
 > 
 > $ cd ..
 >
@@ -73,14 +80,14 @@ To run the Example proceed as follows:
 ------------
 > $ cd Example
 > 
-> $ python runSimilarityTransformObj.py
+> $ python3 runSimilarityTransformObj.py
 
 ------------
 
 or
 
 ------------
-> $ python runSimilarityTransform.py
+> $ python3 runSimilarityTransform.py
 
 ------------
 
