@@ -72,14 +72,14 @@ def runBundle(filename):
 
         '''insert the camera into the minimizer'''
         min.cam.push_back(cam)
-    if not unique_calib:
-        calib = opt.cam_in_t()
-        calib.fx = float(ls[0].split('\t')[1])
-        calib.fy = float(ls[0].split('\t')[1])
-        calib.u0 = 0.0
-        calib.v0 = 0.0
-        calib.k1 = float(ls[8])
-        min.cam_in.push_back(calib)
+        if not unique_calib:
+            calib = opt.cam_in_t()
+            calib.fx = float(ls[0].split('\t')[1])
+            calib.fy = float(ls[0].split('\t')[1])
+            calib.u0 = 0.0
+            calib.v0 = 0.0
+            calib.k1 = float(ls[8])
+            min.cam_in.push_back(calib)
 
     '''create a measurement combination which forces the quaternion of the camera to be of unit length'''
     m = opt.MeasurementCombinations_t()
@@ -113,7 +113,6 @@ def runBundle(filename):
             feature_ind = float(ls[8 + i * 4])
             pt2.x = float(ls[9 + i * 4])
             pt2.y = float(ls[10 + i * 4])
-
             min.pt2.push_back(pt2)
 
             '''create a measurement combination for each observation'''

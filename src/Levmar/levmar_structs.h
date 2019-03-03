@@ -40,6 +40,7 @@ struct ValueStruct_t{
 	oof_float value;
 	external_device_set_value_func_t* m_func;
 	bool set;
+	__host__ __device__
 	ValueStruct_t(){
 		value=0;
 		v1=0;
@@ -47,10 +48,11 @@ struct ValueStruct_t{
 		m_func=0;
 		set=false;
 	}
-    __device__
+ /*   __host__
 	void operator=(oof_float x){
 		value=x;
-	}
+	}*/
+	__host__ __device__
 	void operator()()
 	{
 		(**m_func)(v1,ind,value,set);
@@ -79,6 +81,7 @@ struct MeasurementStruct_t{
 	int startJac;
 	external_device_func_t* m_func;
 	external_device_func_jac_t* m_func_jac;
+	__host__ __device__
 	MeasurementStruct_t():v(0),globalStart(0),func_result(0),jac_value(0),jac_row_ind(0),jac_col_ind(0){
 		robust=0;
 		robust_para_a=0;

@@ -24,7 +24,7 @@
 #define CONFIG_H_
 
 
-//Define if either double or fload should be used
+//Define if either double or float should be used
 typedef double oof_float;
 
 /*If enabled the host memory is uses for the measurement structs, for everything else the memory which is assigned below is used */
