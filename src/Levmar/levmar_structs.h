@@ -47,7 +47,7 @@ struct ValueStruct_t{
 		m_func=0;
 		set=false;
 	}
-	__device__
+    __device__
 	void operator=(oof_float x){
 		value=x;
 	}

@@ -61,7 +61,7 @@ def getFQuat():
 
 
 if __name__ == '__main__':
-    print sympy.__version__
+    print(sympy.__version__)
     
     '''define the error/cost function of the similarity transformation'''
     f1=getFSimTrans()

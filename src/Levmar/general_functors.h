@@ -207,6 +207,17 @@ struct get_value_functor{
 	   }
 };
 
+typedef thrust::tuple<oof_float&, ValueStruct_t&> SetValueTuple;
+
+struct set_value_functor{
+    __host__ __device__
+        void operator()(SetValueTuple t)
+        {
+            thrust::get<1>(t).value = thrust::get<0>(t);
+        }
+};
+
+
 template <typename T>
 struct squared_plus_functor
 {

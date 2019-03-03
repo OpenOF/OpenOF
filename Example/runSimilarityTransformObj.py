@@ -67,8 +67,8 @@ def similarityTransformation(pt1,pt2):
     #transV[0].CZ=-delta[2]
     
     '''insert the points in the struct and generate a measurement struct for each point pair'''
-    for i,p1,p2 in zip(range(pt1.shape[0]),pt1,pt2):
-        print p1,p2
+    for i,p1,p2 in zip(list(range(pt1.shape[0])),pt1,pt2):
+        print(p1,p2)
         p1a=opt.pt3_t()
         p1a.X=p1[0]
         p1a.Y=p1[1]
@@ -103,17 +103,17 @@ def similarityTransformation(pt1,pt2):
     min.run()
     
     res=min.residuals
-    print "Residuals per function:"
+    print("Residuals per function:")
     
     '''each measurement combination contains its final residual'''
     for m in meas:
         i=0
         for r in m.res:
             i+=1 
-            print i,":", r
+            print(i,":", r)
             
     
-    print "Residual",res[res.size()-1] 
+    print("Residual",res[res.size()-1]) 
     return numpy.array([transV[0].CX,transV[0].CY,transV[0].CZ,transV[0].q1,transV[0].q2,transV[0].q3,transV[0].q4,transV[0].s]),res[res.size()-1]
 
 def quat2rot(arg1=None,arg2=None,arg3=None,arg4=None):
@@ -188,6 +188,6 @@ if __name__ == '__main__':
     pt1new=transform(trans,pt1)
 
     '''print estimated transformation'''
-    print "translation:", trans[0:3]
-    print "rotation quaternion:", trans[3:7]
-    print "scale:", trans[7]
+    print("translation:", trans[0:3])
+    print("rotation quaternion:", trans[3:7])
+    print("scale:", trans[7])

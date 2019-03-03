@@ -274,7 +274,7 @@ void cgls(LinearOperator1& At,
         Monitor& monitor,
         Preconditioner& M, oof_float mu)
 {
-    CUSP_PROFILE_SCOPED();
+   // CUSP_PROFILE_SCOPED();
 
     typedef typename LinearOperator1::value_type   ValueType;
     typedef typename LinearOperator1::memory_space MemorySpace;
@@ -532,7 +532,9 @@ int Levmar::run(){
     		oof_float gainLower=cusp::blas::dot(h,temp);
 
     		//schreibe werte aus x nach d_value
-    		thrust::copy(xnew.begin(),xnew.end(),d_ValueVec.begin());
+    		//thrust::copy(xnew.begin(),xnew.end(),d_ValueVec.begin());
+    		thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(xnew.begin(), d_ValueVec.begin())),
+    		thrust::make_zip_iterator(thrust::make_tuple(xnew.end(), d_ValueVec.end())),set_value_functor());
 
     		if (verbose>4) std::cout<<"copy xnew to original structs\n";
     		//schreibe werte in original structs
@@ -644,7 +646,11 @@ int Levmar::run(){
 	//copy solution
 
 	//write value from x to d_value
-	thrust::copy(x.begin(),x.end(),d_ValueVec.begin());
+	//thrust::copy(x.begin(),x.end(),d_ValueVec.begin());
+	thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(x.begin(), d_ValueVec.begin())),
+    		thrust::make_zip_iterator(thrust::make_tuple(x.end(), d_ValueVec.end())),set_value_functor());
+
+
 
 	//write values to original structs
 	thrust::for_each(d_ValueVec.begin(),d_ValueVec.end(),wrapper_functor_set_get(true));

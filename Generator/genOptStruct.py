@@ -136,11 +136,11 @@ def genOptCodeSet(name,variables):
     if var is not None:    
         outstr+='\t%s_t * v=(%s_t*)%s;\n'%(name,name,name)
         outstr+='\tif (set){\n'
-        for i,x in zip(range(len(var)),var):
+        for i,x in zip(list(range(len(var))),var):
             outstr+='\t\tif (ind == %d)\n'%i
             outstr+='\t\t\tv->%s=value;\n'%str(x)
         outstr+='\t}else{\n'
-        for i,x in zip(range(len(var)),var):
+        for i,x in zip(list(range(len(var))),var):
             outstr+='\t\tif (ind == %d)\n'%i
             outstr+='\t\t\tvalue=v->%s;\n'%str(x)
         outstr+='\t}\n'
@@ -393,7 +393,7 @@ def genOptCodeMeasIterator(measFuncName,names,measFuncInputJac,measFuncInputObj)
     :param measFuncInputObj: List of Lists. Each inner list correspond to one measurement function and contains the indices of objects that are part of this measurement. The indice belongs the names list.
     """
     
-    for i,n,jac in zip(range(len(measFuncName)),measFuncName,measFuncInputJac):
+    for i,n,jac in zip(list(range(len(measFuncName))),measFuncName,measFuncInputJac):
         yield genOptCodeMeas(n,[names[j] for j in measFuncInputObj[i]],jac)
 
 def genOptCodeFuncMeasIterator(measFuncName,names,variables,addVariables,measFuncInputF,measFuncInputJac,measFuncInputObj,measFuncInputObjOpt,addFunc=[],debug=False):
@@ -414,7 +414,7 @@ def genOptCodeFuncMeasIterator(measFuncName,names,variables,addVariables,measFun
     for str in addFunc:
         yield str
     
-    for i,n,f,jac,opt in zip(range(len(measFuncName)),measFuncName,measFuncInputF,measFuncInputJac,measFuncInputObjOpt):
+    for i,n,f,jac,opt in zip(list(range(len(measFuncName))),measFuncName,measFuncInputF,measFuncInputJac,measFuncInputObjOpt):
         yield genOptCodeFuncMeas(n,f,[names[j] for j in measFuncInputObj[i]],\
                                  [variables[j] for j in measFuncInputObj[i]],\
                                  [addVariables[j] for j in measFuncInputObj[i]],debug=debug)
@@ -465,7 +465,7 @@ def genOptCodeFuncMeas(name,f,namesOpt,variablesOpt,addVariables,debug=False):
     outStr+='void ** v,'
     #void * _v1, void * _v2,void * _v3, void * _v4,void * _v5
     outStr+='oof_float* func_result){\n'
-    for i,no,vs,avs in zip(range(len(namesOpt)),namesOpt,variablesOpt,addVariables):
+    for i,no,vs,avs in zip(list(range(len(namesOpt))),namesOpt,variablesOpt,addVariables):
         #print vs
         
         outStr+='\n'
@@ -497,7 +497,7 @@ def genOptCodeFuncMeas(name,f,namesOpt,variablesOpt,addVariables,debug=False):
                     if free_sym.index(temp_v)>-1:                
                         outStr+='\toof_float v%d_%s=v%d->%s;\n'%(i+1,v,i+1,v)
                 except:
-                    print v, "not used in function", name
+                    print(v, "not used in function", name)
                     pass
             
                  
@@ -558,14 +558,14 @@ def genOptCodeJacMeas(name,jac,namesOpt,variablesOpt,addVariables,jacOrder=None)
     
     
     if jacOrder is None or len(jacOrder)==0:
-        jacOrder=range(len(namesOpt))
+        jacOrder=list(range(len(namesOpt)))
     outStr='__host__ __device__\n'
     outStr+='void %s_jac('%name
     #for i in range(1,NR_OPT_PARA+1):
     outStr+='void ** v,'
      #void * _v2,void * _v3, void * _v4,void * _v5,
     outStr+='int rowStart,oof_float * jac_value, int* jac_row_ind,int* jac_col_ind){\n'
-    for i,no,vs,avs in zip(range(len(namesOpt)),namesOpt,variablesOpt,addVariables):
+    for i,no,vs,avs in zip(list(range(len(namesOpt))),namesOpt,variablesOpt,addVariables):
         #print vs
         
         outStr+='\n'
@@ -607,7 +607,7 @@ def genOptCodeJacMeas(name,jac,namesOpt,variablesOpt,addVariables,jacOrder=None)
                     if free_sym.index(temp_v)>-1:                
                         outStr+='\toof_float v%d_%s=v%d->%s;\n'%(i+1,v,i+1,v)
                 except:
-                    print v, "not used in jacobian",name
+                    print(v, "not used in jacobian",name)
                     pass                
                 
                 
@@ -671,14 +671,14 @@ def genOptCodeJacMeasOld(name,jac,namesOpt,variablesOpt,addVariables,jacOrder=No
     
     
     if jacOrder is None:
-        jacOrder=range(len(namesOpt))
+        jacOrder=list(range(len(namesOpt)))
     outStr='__host__ __device__\n'
     outStr+='void %s_jac('%name
     for i in range(1,NR_OPT_PARA+1):
         outStr+='void * _v%d,'%i
      #void * _v2,void * _v3, void * _v4,void * _v5,
     outStr+='int rowStart,oof_float * jac_value, int* jac_row_ind,int* jac_col_ind){\n'
-    for i,no,vs,avs in zip(range(len(namesOpt)),namesOpt,variablesOpt,addVariables):
+    for i,no,vs,avs in zip(list(range(len(namesOpt))),namesOpt,variablesOpt,addVariables):
         #print vs
         var=sympy.symbols(vs)
         outStr+='\n'
@@ -989,10 +989,10 @@ def genOptCodeFillClass(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd
     outStr+='#endif\n'
     outStr+='\tfor(int i=0;i<measurementCombinations.size();i++){\n'
     outStr+='\t\tint type=measurementCombinations[i].type;\n'
-    for nf,nj,ind,i in zip(namesMeasF,namesMeasJac,namePerMeasInd,range(len(namesMeasF))):
+    for nf,nj,ind,i in zip(namesMeasF,namesMeasJac,namePerMeasInd,list(range(len(namesMeasF)))):
         outStr+='\t\tif (type==%d){\n'%i
         outStr+='\t\t\tMeasurement_%s_t m(func%s,jac%s,&v[current_pointer_index]);\n'%(nf,nf,nj)
-        for nameInd,j in zip(ind,range(len(ind))):
+        for nameInd,j in zip(ind,list(range(len(ind)))):
             outStr+='\t\t\t\tv_temp[current_pointer_index+%d]=thrust::raw_pointer_cast(&d_%s[measurementCombinations[i].v[%d]]);\n'%(j,names[nameInd],j)
         
         outStr+='\t\t\tm.robust=measurementCombinations[i].robust;\n'
@@ -1235,10 +1235,10 @@ def genOptCodeFill(names,namesMeasF,namesMeasJac,optNamesInd,namePerMeasInd,adva
     outStr+='#endif\n'
     outStr+='\tfor(int i=0;i<measurementCombinations.size();i++){\n'
     outStr+='\t\tint type=measurementCombinations[i].type;\n'
-    for nf,nj,ind,i in zip(namesMeasF,namesMeasJac,namePerMeasInd,range(len(namesMeasF))):
+    for nf,nj,ind,i in zip(namesMeasF,namesMeasJac,namePerMeasInd,list(range(len(namesMeasF)))):
         outStr+='\t\tif (type==%d){\n'%i
         outStr+='\t\t\tMeasurement_%s_t m(func%s,jac%s,&v[current_pointer_index]);\n'%(nf,nf,nj)
-        for nameInd,j in zip(ind,range(len(ind))):
+        for nameInd,j in zip(ind,list(range(len(ind)))):
             outStr+='\t\t\t\tv_temp[current_pointer_index+%d]=thrust::raw_pointer_cast(&d_%s[measurementCombinations[i].v[%d]]);\n'%(j,names[nameInd],j)
         
         outStr+='\t\t\tm.robust=measurementCombinations[i].robust;\n'
@@ -1366,7 +1366,7 @@ def genOptCodeOptimizeFileH(namesMeasF,src,name="optimize",filenameStruct='struc
 
     outStr+='\n'
     outStr+='enum MeasTyp {'
-    for i,n in zip(range(len(namesMeasF)),namesMeasF):
+    for i,n in zip(list(range(len(namesMeasF))),namesMeasF):
         outStr+='e'+n
         if i<len(namesMeasF)-1:
             outStr+=','
@@ -1388,7 +1388,7 @@ def genOptCodeExtractHeader(namesMeasF,src):
     :param src: source of the method that fills the optimization with data.    
     """
     outStr='enum MeasTyp {'
-    for i,n in zip(range(len(namesMeasF)),namesMeasF):
+    for i,n in zip(list(range(len(namesMeasF))),namesMeasF):
         outStr+='e'+n
         if i<len(namesMeasF):
             outStr+=','
@@ -1458,12 +1458,12 @@ def genOptCodeCMakeLists(libName,libNamePy,filenameOpt,openof_root):
     
 def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,measFuncInputObj,measFuncInputObjOpt,measFuncObjOpt,addFunc=[],filename_structs='structs',min_function_name='minimize',min_class_name='Minimizer',filename_cpp='optimize',libname_python='OptimizerPy',libname_cpp='Optimizer',debug=False,clear_model_folder=False,openof_root='../'):
     measFuncInputJac=[]
-    for i,f,o in zip(range(len(measFuncInputF)),measFuncInputF,measFuncInputObjOpt):
+    for i,f,o in zip(list(range(len(measFuncInputF))),measFuncInputF,measFuncInputObjOpt):
         var=''
         for vind in o:
             vaddon='v%d_'%(vind+1)
-            print vind
-            print variables[measFuncInputObj[i][vind]]
+            print(vind)
+            print(variables[measFuncInputObj[i][vind]])
             if type(variables[measFuncInputObj[i][vind]])==list:
                 varstr=vaddon+variables[measFuncInputObj[i][vind]][0]
             else:
@@ -1473,12 +1473,12 @@ def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,meas
                 var+=varstr
             else:
                 var+=','+varstr
-        print var
-	if len(var.split(','))==1:
-		var_sympy=sympy.Matrix([sympy.symbols(var)])
-		print var_sympy
-	else:
-	        var_sympy=sympy.Matrix(sympy.symbols(var))
+        print(var)
+        if len(var.split(','))==1:
+            var_sympy=sympy.Matrix([sympy.symbols(var)])
+            print(var_sympy)
+        else:
+            var_sympy=sympy.Matrix(sympy.symbols(var))
         
         
         jac=f.jacobian(var_sympy)
@@ -1487,7 +1487,7 @@ def genAll(names,variables,addVariables,addCode,measFuncName,measFuncInputF,meas
     if clear_model_folder:
         for f in glob.glob(openof_root+'/src/Model/*'):
             if f.find('README')<0:
-	            os.remove(f)
+                os.remove(f)
     genOptCodeStructFuncFile(names,variables,openof_root=openof_root)
     genOptCodeStructFile(names,variables,addVariables,addCode,filename=filename_structs,openof_root=openof_root)
     

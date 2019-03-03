@@ -145,12 +145,12 @@ def getFQuat():
 
 
 if __name__ == '__main__':
-    print sympy.__version__
+    print((sympy.__version__))
     if sympy.__version__=='0.7.2':
-        print "Please use sympy version 0.7.1"
-        print "sympy.cse returns an error."
-        print "a bugfix in sympy is discuessed here:"
-        print "http://www.mail-archive.com/sympy@googlegroups.com/msg15986.html"
+        print("Please use sympy version 0.7.1")
+        print("sympy.cse returns an error.")
+        print("a bugfix in sympy is discuessed here:")
+        print("http://www.mail-archive.com/sympy@googlegroups.com/msg15986.html")
     
         
     f1=getFInv()
