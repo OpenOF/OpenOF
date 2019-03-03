@@ -10,16 +10,14 @@ Hardware requirements:
 Software requirements:
 ------------------------------------------
 
-The framework was tested using Ubuntu 12.04, 64 bit and libraries with the following version number.
-- CUDA 5
-- Python 2.7
-- sympy 0.7.1 or 0.7.3
-
-  It is recommended to use this version as the sympy.cse function in version 0.7.2 does not work for some expression (http://www.mail-archive.com/sympy@googlegroups.com/msg15986.html).
+The framework was tested using Ubuntu 18.04, 64 bit and libraries with the following version number.
+- CUDA 9.1
+- Python 3.5
+- sympy 1.3
 - Thrust 1.6
-- CUSP 0.3
-- numpy 1.6.1
-- swig 2.0.4 
+- CUSP 0.5.1
+- numpy 1.14.2
+- swig 3.0.8
 
 Cite:
 ------------------------------------------
