@@ -7,19 +7,19 @@ License update to Apache License to allow commercial use.
 Hardware requirements:
 ------------------------------------------
 
-- Nvidia GPU with compute capability >= 2.0
+- Nvidia GPU with compute capability >= 8.0
 
 Software requirements:
 ------------------------------------------
 
-The framework was tested using Ubuntu 18.04, 64 bit and libraries with the following version number.
-- CUDA 9.1
-- Python 3.5
-- sympy 1.3
-- Thrust 1.6
-- CUSP 0.5.1
-- numpy 1.14.2
-- swig 3.0.8
+The framework was tested using Ubuntu 22.04, 64 bit and libraries with the following version number.
+- CUDA 12.4.1
+- Python 3.10
+- sympy 1.12
+- Thrust 2.3.2
+- CUSP master (07.06.2024)
+- numpy 1.24.4
+- swig 4.0
 
 Cite:
 ------------------------------------------
