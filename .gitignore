@@ -1,0 +1,15 @@
+src/Model/*.h
+src/Model/*.cu
+src/Model/*.i
+CMakeFiles
+CMakeCache.txt
+*/__pycache__/*
+__pycache__/*
+.github
+cmake_install.cmake
+CMakeLists.txt
+Makefile
+*.so
+
+
+
