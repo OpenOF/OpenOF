@@ -1,6 +1,8 @@
 OpenOF: Framework for Sparse Non-linear Least Squares Optimization on a GPU
 ===================================================
-Version 0.1.1
+Version 0.2
+
+License update to Apache License to allow commercial use.
 
 Hardware requirements:
 ------------------------------------------
@@ -33,18 +35,17 @@ License:
    Copyright (C) 2012 C. Wefelscheid
 
 
-   OpenOF is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-   
-   OpenOF is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-   
-   You should have received a copy of the GNU General Public License
-   along with OpenOF.  If not, see <http://www.gnu.org/licenses/>.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 
 Getting started:
 ------------------------------------------
@@ -92,6 +93,14 @@ or
 ------------
 
 A more complex example is under Example/bundle.py (design) and Example/runBundle.py (runtime).
+
+Docker:
+------------------------------------------
+Use the provided docker from inside vscode.
+Install the remote development extension within vscode.
+
+Inside the docker you can continue from getting startet step:
+"cd Example"
 
 Trouble Shooting:
 ------------------------------------------
